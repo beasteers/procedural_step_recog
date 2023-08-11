@@ -7,12 +7,12 @@ MODEL:
   # CONTEXT_LENGTH: 4
   # OUTPUT_DIM: 42
   CONTEXT_LENGTH: 'full'
-  OUTPUT_DIM: 42
+  OUTPUT_DIM: 9
 
   # ++
   # ++
   # PREFIX_CLASSES: ['start', 'end']
-  SKILLS: ['pinwheels', 'coffee', 'mugcake']
+  SKILLS: ['tourniquet']
   USE_AUDIO: false
   USE_OBJECTS: true
   USE_BN: false

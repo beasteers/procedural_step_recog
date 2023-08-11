@@ -29,6 +29,11 @@ _C.MODEL = CfgNode()
 _C.MODEL.HIDDEN_SIZE = 1024
 _C.MODEL.CONTEXT_LENGTH = 'all'
 _C.MODEL.OUTPUT_DIM = 33
+_C.MODEL.DRIVE_ID = ""
+_C.MODEL.SKILLS = []
+_C.MODEL.USE_AUDIO = False
+_C.MODEL.USE_OBJECTS = False
+_C.MODEL.USE_BN = False
 
 # -----------------------------------------------------------------------------
 # Dataset options
