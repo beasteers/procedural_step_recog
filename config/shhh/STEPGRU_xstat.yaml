@@ -1,0 +1,34 @@
+MODEL:
+  HIDDEN_SIZE: 1024
+  CONTEXT_LENGTH: 'full'
+  OUTPUT_DIM: 6 # offset 34
+
+  # ++
+  # SUFFIX_CLASSES: ['background']
+  SKILLS: ['m5']
+  USE_AUDIO: false
+  USE_OBJECTS: false
+  DRIVE_ID: 1SWl9ZZtX1xO6oSNFx5NueEbSP5K6IifE
+  # ++
+DATASET:
+  NAME: 'Milly'
+  LOCATION: '/vast/ffd2011/BBN-features/omnivore/M5_X-Stat' #'/vast/irr2020/omni_bbn'
+  AUDIO_LOCATION: ''
+
+
+  VIDEO_LAYER: 'shoulders'
+  TR_ANNOTATIONS_FILE: 'BBN_train.csv'
+  VL_ANNOTATIONS_FILE: 'BBN_validation.csv'
+  INCLUDE_IMAGE_AUGMENTATIONS: True
+  INCLUDE_TIME_AUGMENTATIONS: False
+  FPS: 30
+  HOP_SIZE: 0.5 # in seconds
+DATALOADER:
+  NUM_WORKERS: 12
+  PIN_MEMORY: True
+TRAIN:
+  ENABLE: True
+  NUM_GPUS: 1
+  BATCH_SIZE: 16
+  LR: 0.001
+  EPOCHS: 1000

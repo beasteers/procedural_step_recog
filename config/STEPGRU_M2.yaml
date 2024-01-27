@@ -1,0 +1,40 @@
+MODEL:
+  HIDDEN_SIZE: 1024
+  #<<<<<<< Updated upstream
+  #CONTEXT_LENGTH: 'full'
+  #OUTPUT_DIM: 9 # offset 34
+  #=======
+  # CONTEXT_LENGTH: 4
+  # OUTPUT_DIM: 42
+  CONTEXT_LENGTH: 'full'
+  OUTPUT_DIM: 9
+
+  # ++
+  # ++
+  # PREFIX_CLASSES: ['start', 'end']
+  SKILLS: ['m2']
+  USE_AUDIO: false
+  USE_OBJECTS: true
+  USE_BN: false
+  DRIVE_ID: 1ArZFX4LuuB4SbmmWSDit4S8gPhkc2DRq
+  # ++
+DATASET:
+  NAME: 'Milly'
+  LOCATION: '/vast/irr2020/omni_bbn'
+  AUDIO_LOCATION: ''
+  VIDEO_LAYER: 'shoulders'
+  TR_ANNOTATIONS_FILE: 'BBN_train.csv'
+  VL_ANNOTATIONS_FILE: 'BBN_validation.csv'
+  INCLUDE_IMAGE_AUGMENTATIONS: True
+  INCLUDE_TIME_AUGMENTATIONS: True
+  FPS: 30
+  HOP_SIZE: 0.5 # in seconds
+DATALOADER:
+  NUM_WORKERS: 12
+  PIN_MEMORY: True
+TRAIN:
+  ENABLE: True
+  NUM_GPUS: 1
+  BATCH_SIZE: 32
+  LR: 0.001
+  EPOCHS: 5
