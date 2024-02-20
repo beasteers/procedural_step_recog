@@ -4,41 +4,44 @@ import torch
 import supervision as sv
 import numpy as np
 
-from .model import StepPredictor
+from model import StepPredictor
 
 import ipdb
 @ipdb.iex
 @torch.no_grad()
-def main(video_path, output_path='output.mp4', skill="M3"):
+def main(video_path, output_path='output.mp4', cfg_file=""):
     '''Visualize the outputs of the model on a video.
 
     '''
     # define model
-    model = StepPredictor(skill)
+    model = StepPredictor(cfg_file).to("cuda")
 
     # create video reader and video writer
     video_info = sv.VideoInfo.from_video_path(video_path)
+
+    step_process = 15
+    prob_step = np.zeros(model.cfg.MODEL.OUTPUT_DIM + 1)
+    prob_step[-1] = 1.0
+    step_desc = "No step"
+
     with sv.VideoSink(output_path, video_info=video_info) as sink:
         # iterate over video frames
-        for frame in tqdm.tqdm(sv.get_video_frames_generator(video_path)):
-            
-            # take in a frame and make the next prediction
-            prob_step = model(frame)
+        for idx, frame in tqdm.tqdm(enumerate(sv.get_video_frames_generator(video_path), -2)):
+            if model.has_omni_maxlen() and idx % step_process == 0:
+              # take in a queue frame and make the next prediction
+              prob_step = model(frame).cpu().squeeze().numpy()
+              step_idx  = np.argmax(prob_step)
+              step_desc = "No step" if step_idx >= len(model.STEPS) else model.STEPS[step_idx]              
+            else:
+              model.queue_frame(frame)  
+
             # draw the prediction (could be your bar chart) on the frame
-            output_frame = draw_step_prediction(frame, prob_step.cpu().numpy().tolist(), model.STEPS)
-            sink.write_frame(output_frame)
-
-
-def draw_step_prediction(frame, prob_step, step_labels):
-  step_idx  = np.argmax(prob_step)
-  step_desc = step_labels[step_idx] if step_idx < len(step_labels) else "No step"
-
-  plot_graph(frame, prob_step, step_desc)
-
-  return frame
+            plot_graph(frame, prob_step, step_desc)
+            sink.write_frame(frame)
 
 ##TODO: Review the offsets
-def plot_graph(frame, prob_step, step_desc, tl=(10, 25), scale=1.0, bar_space=10, text_color=(219, 219, 0), bar_clor=(197, 22, 22), thickness=1):
+##colors in BGR
+def plot_graph(frame, prob_step, step_desc, tl=(10, 25), scale=1.0, bar_space=10, text_color=(0, 219, 219), bar_clor=(22, 22, 197), thickness=1):
   width       = 30
   height      = 100
   start_point = (50, 50)

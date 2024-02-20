@@ -14,7 +14,7 @@ _C.BATCH_SIZE = 32
 _C.MODEL = CfgNode()
 _C.MODEL.ARCH = "slowfast"
 _C.MODEL.MODEL_NAME = "SlowFast"
-_C.MODEL.WIN_LENGTH = 1
+_C.MODEL.WIN_LENGTH = 2
 _C.MODEL.HOP_SIZE = 0.5
 _C.MODEL.NFRAMES = 32
 _C.MODEL.IN_SIZE = 224
@@ -47,3 +47,21 @@ def get_cfg():
     Get a copy of the default config.
     """
     return _C
+
+def load_config(args):
+    """
+    Given the arguemnts, load and initialize the configs.
+    Args:
+        args (argument): arguments includes `shard_id`, `num_shards`,
+            `init_method`, `cfg_file`, and `opts`.
+    """
+    # Setup cfg.
+    cfg = get_cfg()
+    # Load config from cfg.
+    if args.cfg_file is not None:
+        cfg.merge_from_file(args.cfg_file)
+    # Load config from command line, overwrite config from opts.
+    if args.opts is not None:
+        cfg.merge_from_list(args.opts)
+
+    return cfg
