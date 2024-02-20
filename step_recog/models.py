@@ -8,16 +8,19 @@ import glob
 import numpy as np
 import torch
 import math
-import pdb
+# import pdb
 from torch import nn
 
-import gdown
-import yaml
+# import gdown
+# import yaml
 from collections import OrderedDict
+from step_recog.full.download import cached_download_file
 
 ##mod_path = os.path.join(os.path.dirname(__file__), 'procedural_step_recog')
 mod_path = os.path.join(os.path.dirname(__file__), '..')
 sys.path.insert(0,  mod_path)
+
+DEVICE = ('mps' if torch.backends.mps.is_available() else 'cuda' if torch.cuda.is_available() else 'cpu')
 
 
 def custom_weights(layer):
@@ -26,7 +29,7 @@ def custom_weights(layer):
     nn.init.zeros_(layer.bias)
 
 class OmniGRU(nn.Module):
-    def __init__(self, cfg, load = False):
+    def __init__(self, cfg, load=False):
         super().__init__()
         n_layers = 2
         drop_prob = 0.2
@@ -73,7 +76,8 @@ class OmniGRU(nn.Module):
         self.relu = nn.ReLU()
 
         if load:
-          self.load_state_dict( self.update_version(torch.load( cfg.MODEL.CHECKPOINT_FILE_PATH )))
+          assert cfg.MODEL.PRETRAINED_CHECKPOINT_URL, "Missing cfg.MODEL.PRETRAINED_CHECKPOINT_URL"
+          self.load_state_dict( self.update_version(torch.load(cached_download_file(cfg.MODEL.PRETRAINED_CHECKPOINT_URL), map_location=DEVICE)))
         else:
           self.apply(custom_weights)
 

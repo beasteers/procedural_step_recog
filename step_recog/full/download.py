@@ -24,5 +24,5 @@ def cached_download_file(
     cached_file = os.path.join(model_dir, file_name or os.path.basename(urlparse(url).path))
     if not os.path.exists(cached_file):
         sys.stderr.write(f'Downloading: "{url}" to {cached_file}\n')
-        download_url_to_file(url, cached_file, hash_prefix, progress=progress)
+        download_url_to_file(url, cached_file, progress=progress)
     return cached_file

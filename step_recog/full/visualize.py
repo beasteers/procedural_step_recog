@@ -4,7 +4,8 @@ import torch
 import supervision as sv
 import numpy as np
 
-from model import StepPredictor
+from step_recog.full.model import StepPredictor
+
 
 import ipdb
 @ipdb.iex
@@ -14,7 +15,7 @@ def main(video_path, output_path='output.mp4', cfg_file=""):
 
     '''
     # define model
-    model = StepPredictor(cfg_file).to("cuda")
+    model = StepPredictor(cfg_file).to("mps")
 
     # create video reader and video writer
     video_info = sv.VideoInfo.from_video_path(video_path)

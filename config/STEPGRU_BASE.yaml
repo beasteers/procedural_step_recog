@@ -9,9 +9,8 @@ MODEL:
   #  CHECKPOINT_FILE_PATH: "/home/user/data/BBN/new/M1/feature/omnimix/step_gru_best_model.pt"
   APPEND_OUT_POSITIONS: 3
 
-  
-  YOLO_CHECKPOINT_URL: /Users/bea/Downloads/M2_M3_M5_R18_v9_2.pt
-  OMNIVORE_CONFIG: '/home/user/data/config/OMNIVORE.yaml'
+  YOLO_CHECKPOINT_URL: https://github.com/beasteers/procedural_step_recog/releases/latest/download/M2_M3_M5_R18_v9.pt
+  OMNIVORE_CONFIG: OMNIVORE.yaml
 DATASET:
   NAME: 'Milly'
   LOCATION: '/omnivore'

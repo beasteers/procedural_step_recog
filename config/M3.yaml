@@ -1,6 +1,6 @@
 _BASE_: STEPGRU_BASE.yaml
 MODEL:
-  OMNIGRU_CHECKPOINT_URL: 
+  PRETRAINED_CHECKPOINT_URL: https://github.com/beasteers/procedural_step_recog/releases/latest/download/M3.pt
   OUTPUT_DIM: 5
   
 SKILLS:

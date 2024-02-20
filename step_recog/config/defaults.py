@@ -2,6 +2,8 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
 
 """Configs."""
+import os
+import pathlib
 from fvcore.common.config import CfgNode
 
 _C = CfgNode()
@@ -44,8 +46,8 @@ _C.MODEL.CHECKPOINT_FILE_PATH = ''
 _C.MODEL.APPEND_OUT_POSITIONS = 2
 
 _C.MODEL.YOLO_CHECKPOINT_URL = ''
-_C.MODEL.OMNIGRU_CHECKPOINT_URL = ''
-_C.MODEL.OMNIVORE_CONFIG = 'OMNIVORE'
+_C.MODEL.PRETRAINED_CHECKPOINT_URL = ''
+_C.MODEL.OMNIVORE_CONFIG = 'OMNIVORE.yaml'
 
 # -----------------------------------------------------------------------------
 # Dataset options
@@ -87,6 +89,23 @@ def get_cfg():
     """
     return _C
 
+
+# get built-in configs from the step_recog/config directory
+CONFIG_DIR = pathlib.Path(__file__).parent.parent.parent / 'config'
+
+
+def find_config_file(cfg_file):
+    cfg_files = [
+        cfg_file,  # you passed a valid config file path
+        CONFIG_DIR / cfg_file,  # a path relative to the config directory
+        CONFIG_DIR / f'{cfg_file}.yaml',  # the name without the extension
+        CONFIG_DIR / f'{cfg_file}.yml',
+    ]
+    for f in cfg_files:
+        if os.path.isfile(f):
+            return f
+    raise FileNotFoundError(cfg_file)
+
 def load_config(args):
     """
     Given the arguemnts, load and initialize the configs.
@@ -97,10 +116,20 @@ def load_config(args):
     # Setup cfg.
     cfg = get_cfg()
     # Load config from cfg.
+    if isinstance(args, (str, pathlib.Path)):
+        args = args_hook(args)
     if args.cfg_file is not None:
-        cfg.merge_from_file(args.cfg_file)
+        # use paths relative to the repo root
+        cfg.merge_from_file(find_config_file(args.cfg_file))
     # Load config from command line, overwrite config from opts.
     if args.opts is not None:
         cfg.merge_from_list(args.opts)
 
     return cfg
+
+
+def args_hook(cfg_file):
+  args = lambda: None
+  args.cfg_file = cfg_file
+  args.opts = None   
+  return args
