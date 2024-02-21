@@ -126,7 +126,7 @@ class OmniGRU(nn.Module):
 
     def init_hidden(self, batch_size):
         weight = next(self.parameters()).data
-        hidden = weight.new(self.n_layers, batch_size, self.hidden_dim).zero_().to(device)
+        hidden = weight.new(self.n_layers, batch_size, self.hidden_dim).zero_().to(weight.device)
         return hidden
 
     def update_version(self, state_dict):

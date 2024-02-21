@@ -15,7 +15,7 @@ def main(video_path, output_path='output.mp4', cfg_file=""):
 
     '''
     # define model
-    model = StepPredictor(cfg_file).to("mps")
+    model = StepPredictor(cfg_file).to('cuda')
 
     # create video reader and video writer
     video_info = sv.VideoInfo.from_video_path(video_path)

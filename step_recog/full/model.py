@@ -97,7 +97,7 @@ class StepPredictor(nn.Module):
 
             # compute omnivore embeddings
             X_omnivore = torch.stack(list(self.omnivore_input_queue), dim=1)[None]
-            frame_idx = np.linspace(0, self.omnivore_input_queue.maxlen - 1, self.omni_cfg.MODEL.NFRAMES).astype('long') #same as act_recog.dataset.milly.py:pack_frames_to_video_clip
+            frame_idx = np.linspace(0, len(self.omnivore_input_queue) - 1, self.omni_cfg.MODEL.NFRAMES).astype('long') #same as act_recog.dataset.milly.py:pack_frames_to_video_clip
             X_omnivore = X_omnivore[:, :, frame_idx, :, :]
             _, Z_action = self.omnivore(X_omnivore.to(Z_objects.device), return_embedding=True)
             Z_action = Z_action[None]

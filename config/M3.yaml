@@ -1,5 +1,6 @@
 _BASE_: STEPGRU_BASE.yaml
 MODEL:
+  YOLO_CHECKPOINT_URL: /src/app/models/yolo/M3.pt
   PRETRAINED_CHECKPOINT_URL: https://github.com/beasteers/procedural_step_recog/releases/latest/download/M3.pt
   OUTPUT_DIM: 5
   
