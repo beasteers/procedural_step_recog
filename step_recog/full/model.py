@@ -46,6 +46,8 @@ class StepPredictor(nn.Module):
             self.yolo = YOLO(yolo_checkpoint)
             self.yolo.eval = lambda *a: None
             self.clip_patches = ClipPatches()
+            names = self.yolo.names
+            self.OBJECT_LABELS = np.array([str(names.get(i, i)) for i in range(len(names))])
         if self.head.use_audio:
             raise NotImplementedError("Audio is not supported atm")
 
